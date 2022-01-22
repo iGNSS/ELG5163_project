@@ -1,0 +1,4 @@
+1 - joint overhead / robot-mounted stereo vision 
+2 - comparison of vision based distance estimation methods
+3 - feature identificition --> object detection --> ranging model + trig
+4 - comparison of existing vision based distance estimation methods
