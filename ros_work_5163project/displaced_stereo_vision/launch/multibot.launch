@@ -1,0 +1,63 @@
+<launch>
+
+  <!-- This is from the ROS Topics chapter c020_publisher_subscriber_turtlesim_example1-->
+  <arg name="x" default="0.0"/>
+  <arg name="y" default="0.0"/>
+  <arg name="world_name" default="empty.world"/>
+  <arg name="model" value="$(env TURTLEBOT3_MODEL)" doc="model type [burger]"/>
+
+   <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="worlds/$(arg world_name)"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+
+
+   <param
+    name="robot_description"
+     command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+
+  <node
+    pkg="gazebo_ros"
+    type="spawn_model"
+    name="spawn_urdf"
+    args="-urdf -model turtlebot3_$(arg model) -x $(arg x) -y $(arg y) -param robot_description" />
+
+  <!-- <node
+      name="data_reporter"
+      pkg="ast4"
+      type="data_reporter.py"
+      output="screen"
+      launch-prefix ="xterm -e"
+      >
+  </node>
+
+  <node
+      name="drive_robot"
+      pkg="ast4"
+      type="drive_robot.py"
+      output="screen"
+      required="true"
+      >
+  </node>
+
+  <node
+      name="sensed_object"
+      pkg="ast4"
+      type="sensed_object.py"
+      output="screen"
+      >
+  </node> -->
+
+  <node
+      name="rqt_graph"
+      pkg="rqt_graph"
+      type="rqt_graph"
+      >
+  </node>
+
+</launch>
