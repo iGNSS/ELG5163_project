@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 import roslib
-roslib.load_manifest('basic_multibot')
+roslib.load_manifest('displaced_stereo_vision')
 import sys
 import rospy
 import cv2
