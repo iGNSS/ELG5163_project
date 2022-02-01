@@ -11,5 +11,5 @@
  </include>
 
   <!-- include our robots -->
-  <include file="$(find turtlebot_controller)/launch/robots.launch"/>
+  <include file="$(find displaced_stereo_vision)/launch/robots.launch"/>
 </launch>

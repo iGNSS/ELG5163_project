@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 import roslib
-roslib.load_manifest('basic_multibot')
+roslib.load_manifest('displaced_stereo_vision')
 import sys
 import rospy
 import cv2
@@ -11,8 +11,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 #change topic for overhead camera
 #need to modify launch file
-IMAGE_SUB_TOPIC = "/robot2/camera/rgb/image_raw"
-
+IMAGE_SUB_TOPIC = "/quadcopter/front_cam/camera/image"
 
 class image_converter:
 
