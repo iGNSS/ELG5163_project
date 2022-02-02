@@ -9,12 +9,14 @@ import cv2
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-IMAGE_SUB_TOPIC = "/robot2/camera/rgb/image_raw"
+#change topic for overhead camera
+#need to modify launch file
+IMAGE_SUB_TOPIC = "/quadcopter/front_cam/camera/image"
 
 class image_converter:
 
   def __init__(self):
-    self.image_pub = rospy.Publisher("image_topic_2",Image)
+    self.image_pub = rospy.Publisher("image_topic_1",Image)
 
     self.bridge = CvBridge()
     self.image_sub = rospy.Subscriber(IMAGE_SUB_TOPIC,Image,self.callback)
@@ -39,7 +41,7 @@ class image_converter:
 
 def main(args):
   ic = image_converter()
-  rospy.init_node('image_converter', anonymous=True)
+  rospy.init_node('quadcopter_camera', anonymous=True)
   try:
     rospy.spin()
   except KeyboardInterrupt:
