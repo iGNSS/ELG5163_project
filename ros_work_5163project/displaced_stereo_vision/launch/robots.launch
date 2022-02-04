@@ -16,6 +16,7 @@
       <arg name="x" value="2.0"/>
       <arg name="y" value="0.0"/>
       <arg name="model"  value="burger" />
+      <arg name="dsv_package"  value="true" />
     </include>
   </group>
   

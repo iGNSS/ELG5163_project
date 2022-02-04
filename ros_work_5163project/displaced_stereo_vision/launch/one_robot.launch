@@ -10,14 +10,20 @@
           name="robot_state_publisher" output="screen"/> -->
   <!-- <arg name="model" value="$(env TURTLEBOT3_MODEL)" doc="model type [burger]"/> -->
   <arg name="model"/>
-
+  <arg name="dsv_package" default="false"/>
   <arg name="x" default="0.0"/>
   <arg name="y" default="0.0"/>
 
+<param
+   name="robot_description"
+    command="$(find xacro)/xacro $(find displaced_stereo_vision)/urdf/turtlebot3_$(arg model).urdf.xacro"
+    if="$(arg dsv_package)"/>
+
   <param
    name="robot_description"
-    command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
-
+    command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro"
+    unless="$(arg dsv_package)"/>
+  
   <node
     pkg="gazebo_ros"
     type="spawn_model"
