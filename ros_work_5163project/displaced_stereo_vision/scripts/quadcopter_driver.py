@@ -18,7 +18,7 @@ vel = Twist()
 TARGET_POS = Pose()
 TARGET_POS.position.x = 1
 TARGET_POS.position.y = 0
-TARGET_POS.position.z = 5
+TARGET_POS.position.z = 3.5
 POS_TOL = 0.1
 
 #functions
@@ -45,7 +45,7 @@ def print_pos():
     print("y = " + str(copter_pose.pose.pose.position.y))
     print("z = " + str(copter_pose.pose.pose.position.z))
     print("")
-    
+
 #main loop
 def quadcopter_driver():
     #init node and subscribers
