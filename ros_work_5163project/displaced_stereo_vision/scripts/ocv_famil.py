@@ -12,8 +12,20 @@ from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 IMAGE_SUB_TOPIC = "/wafflebot/camera/rgb/image_raw"
 
-def find_reds():
-    pass
+def find_reds(img):
+    img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    lower_red = np.array([0,50,50])
+    upper_red = np.array([10,255,255])
+    mask0 = cv2.inRange(img_hsv, lower_red, upper_red)
+    lower_red = np.array([170,50,50])
+    upper_red = np.array([180,255,255])
+    mask1 = cv2.inRange(img_hsv, lower_red, upper_red)
+    mask = mask0+mask1
+    red_pixels = np.argwhere(mask>0)
+    ypx = red_pixels[:,0]
+    xpx = red_pixels[:,1]
+    red_center = [np.mean(ypx), np.mean(xpx)]
+    return red_center
 
 class image_converter:
 
@@ -26,8 +38,11 @@ class image_converter:
   def callback(self,data):
     try:
       cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-      #image processing functions here
-
+      try:
+          burgerbot_coords = find_reds(cv_image)
+          print(burgerbot_coords)
+      except:
+          pass
 
       #
     except CvBridgeError as e:
