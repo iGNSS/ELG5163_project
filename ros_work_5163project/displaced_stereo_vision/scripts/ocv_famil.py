@@ -24,7 +24,7 @@ def find_reds(img):
     red_pixels = np.argwhere(mask>0)
     ypx = red_pixels[:,0]
     xpx = red_pixels[:,1]
-    red_center = [np.mean(ypx), np.mean(xpx)]
+    red_center = (np.mean(ypx), np.mean(xpx))
     return red_center
 
 class image_converter:
@@ -41,6 +41,10 @@ class image_converter:
       try:
           burgerbot_coords = find_reds(cv_image)
           print(burgerbot_coords)
+
+          (rows,cols,channels) = cv_image.shape
+          if cols > 60 and rows > 60 :
+            cv2.circle(cv_image, (int(burgerbot_coords[1]),int(burgerbot_coords[0])), 30, 180)
       except:
           pass
 
@@ -48,11 +52,7 @@ class image_converter:
     except CvBridgeError as e:
       print(e)
 
-    (rows,cols,channels) = cv_image.shape
-    if cols > 60 and rows > 60 :
-      cv2.circle(cv_image, (50,50), 10, 255)
-
-    cv2.imshow("Image window", cv_image)
+    'cv2.imshow("Image window", cv_image)'
     cv2.waitKey(3)
 
     try:
