@@ -19,7 +19,7 @@ TS_WB_IMG = "/wafflebot/camera/rgb/image_raw"
 
 #published topics
 TP_W_I = "/wafflebot/camera/rgb/pub_img"
-TP_BURGERBOT_PX = "/wafflebot/camera/rgb/burgerbot_px"
+TP_BURGERBOT_PX_WB = "/wafflebot/camera/rgb/burgerbot_px"
 
 #define functions
 def find_red_center(img):
@@ -53,7 +53,7 @@ class image_converter:
 
         #publishers
         self.image_pub = rospy.Publisher(TP_W_I, Image, queue_size=10)
-        self.burgerbot_px_pub = rospy.Publisher(TP_BURGERBOT_PX, Pose, queue_size=10)
+        self.burgerbot_px_pub = rospy.Publisher(TP_BURGERBOT_PX_WB, Pose, queue_size=10)
 
         #subscribers
         self.image_sub = rospy.Subscriber(TS_WB_IMG,Image,self.callback)
