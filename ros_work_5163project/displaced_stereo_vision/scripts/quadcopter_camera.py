@@ -86,8 +86,8 @@ class image_converter:
         self.image_sub = rospy.Subscriber(TS_QC_IMG, Image, self.callback)
 
     def burgerbot_px_pose(self):
-        self.burgerbot_px.position.x = self.burgerbot_coords[0]
-        self.burgerbot_px.position.y = self.burgerbot_coords[1]
+        self.burgerbot_px.position.x = self.burgerbot_coords[1]
+        self.burgerbot_px.position.y = self.burgerbot_coords[0]
 
     def callback(self,data):
         try:

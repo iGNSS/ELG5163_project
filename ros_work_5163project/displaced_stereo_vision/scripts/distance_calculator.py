@@ -18,7 +18,7 @@ TP_BURGERBOT_DIST = "burgerbot_distance"
 
 burgerbot_px_QC = Pose()
 burgerbot_px_WB = Pose()
-
+#callback functions
 def HandleBBPX_QC(msg):
     global burgerbot_px_QC
     burgerbot_px_QC = msg
@@ -27,9 +27,21 @@ def HandleBBPX_WB(msg):
     global burgerbot_px_WB
     burgerbot_px_WB = msg
 
+#node
 def distance_calculator():
+    #init node
     rospy.init_node("distance_calculator", anonymous = False)
     rate = rospy.Rate(60)
-
+    #subscribers
     rospy.Subscriber(TS_BURGERBOT_PX_QC, Pose, HandleBBPX_QC)
     rospy.Subscriber(TS_BURGERBOT_PX_WB, Pose, HandleBBPX_WB)
+
+    while not rospy.is_shutdown():
+        print(burgerbot_px_QC)
+        print(burgerbot_px_WB)
+        rate.sleep()
+
+    rospy.spin()
+
+if __name__ == '__main__':
+    distance_calculator()

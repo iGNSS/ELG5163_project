@@ -37,12 +37,6 @@ def find_red_center(img):
     red_center = (np.mean(ypx), np.mean(xpx))
     return red_center
 
-def burgerbot_px_pose(coords):
-    result = Pose()
-    result.position.x = coords[0]
-    result.position.y = coords[0]
-    return result
-
 #node
 class image_converter:
     burgerbot_coords = [0,0]
@@ -59,20 +53,19 @@ class image_converter:
         self.image_sub = rospy.Subscriber(TS_WB_IMG,Image,self.callback)
 
     def burgerbot_px_pose(self):
-        self.burgerbot_px.position.x = self.burgerbot_coords[0]
-        self.burgerbot_px.position.y = self.burgerbot_coords[1]
+        self.burgerbot_px.position.x = self.burgerbot_coords[1]
+        self.burgerbot_px.position.y = self.burgerbot_coords[0]
 
     def callback(self,data):
         try:
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-            self.burgerbot_coords = find_red_center(cv_image)
             cv2.imshow("Image window", cv_image)
             cv2.waitKey(3)
         except CvBridgeError as e:
             print(e)
         try:
-
           self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
+          self.burgerbot_coords = find_red_center(cv_image)
           self.burgerbot_px_pose()
           print(self.burgerbot_px)
           self.burgerbot_px_pub.publish(self.burgerbot_px)
