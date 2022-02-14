@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#from __future__ import print_function
+
+#package imports
 
 import roslib
 roslib.load_manifest('displaced_stereo_vision')

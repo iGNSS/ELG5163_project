@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#from __future__ import print_function
 
 #package imports
 import roslib
@@ -15,7 +14,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 from geometry_msgs.msg import Pose
 
-#declare topic names
+#subscribed topics
 TS_QC_IMG =  "/quadcopter/front_cam/camera/image"
 
 #published topics

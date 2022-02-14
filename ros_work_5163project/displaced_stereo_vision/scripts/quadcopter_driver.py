@@ -1,14 +1,19 @@
 #!/usr/bin/env python
 
+#package imports
 import numpy as np
 import rospy
+
+#message imports
 from geometry_msgs.msg import Pose
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 
-#Topics
-T_COPTER_POSE = "/quadcopter/ground_truth/state"
-T_COPTER_VEL = "/quadcopter/cmd_vel"
+#subscribed topics
+TS_QC_ODO  = "/quadcopter/ground_truth/state"
+
+#published topics
+TP_QC_VEL = "/quadcopter/cmd_vel"
 
 #global varialbles
 copter_pose = Odometry()
@@ -22,7 +27,7 @@ TARGET_POS.position.z = 3.5
 POS_TOL = 0.1
 
 #functions
-def get_copter_pose(msg):
+def handleOdo_QC(msg):
     global copter_pose
     copter_pose = msg
 
@@ -52,10 +57,10 @@ def quadcopter_driver():
 
     rospy.init_node('quadcopter_driver', anonymous = False)
     rate = rospy.Rate(60)
-    rospy.Subscriber(T_COPTER_POSE, Odometry, get_copter_pose)
+    rospy.Subscriber(TS_QC_ODO , Odometry, handleOdo_QC)
 
     #publishers
-    vel_pub = rospy.Publisher(T_COPTER_VEL, Twist, queue_size=20)
+    vel_pub = rospy.Publisher(TP_QC_VEL, Twist, queue_size=20)
 
 
     while not rospy.is_shutdown():
