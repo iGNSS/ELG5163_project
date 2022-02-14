@@ -7,18 +7,21 @@ import sys
 import rospy
 import cv2
 import numpy as np
+
 #message imports
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 from geometry_msgs.msg import Pose
 
-#declare topic names
-
+#subscribed topics
 TS_WB_IMG = "/wafflebot/camera/rgb/image_raw"
+
+#published topics
 TP_W_I = "/wafflebot/camera/rgb/pub_img"
 TP_BURGERBOT_PX = "/wafflebot/camera/rgb/burgerbot_px"
 
+#define functions
 def find_red_center(img):
     img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     lower_red = np.array([0,50,50])
@@ -40,6 +43,7 @@ def burgerbot_px_pose(coords):
     result.position.y = coords[0]
     return result
 
+#node
 class image_converter:
     burgerbot_coords = [0,0]
     burgerbot_px = Pose()
