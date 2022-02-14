@@ -12,7 +12,7 @@ from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 IMAGE_SUB_TOPIC = "/wafflebot/camera/rgb/image_raw"
 
-def find_reds(img):
+def find_red_center(img):
     img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     lower_red = np.array([0,50,50])
     upper_red = np.array([10,255,255])
@@ -39,7 +39,7 @@ class image_converter:
     try:
       cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
       try:
-          burgerbot_coords = find_reds(cv_image)
+          burgerbot_coords = find_red_center(cv_image)
           print(burgerbot_coords)
 
           (rows,cols,channels) = cv_image.shape

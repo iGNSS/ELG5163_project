@@ -20,7 +20,7 @@ T_IMG_SUB = "/quadcopter/front_cam/camera/image"
 T_CAM_INFO = "quadcopter/front_cam/camera/camera_info"
 T_COPTER_POSE = "/quadcopter/ground_truth/state"
 T_WAFFLEBOT_POSE = "/wafflebot/odom"
-def find_reds(img):
+def find_red_center(img):
     img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     lower_red = np.array([0,50,50])
     upper_red = np.array([10,255,255])
@@ -79,7 +79,7 @@ class image_converter:
             cv2.imshow("Image window", cv_image)
             cv2.waitKey(3)
             try:
-                self.burgerbot_coords = find_reds(cv_image)
+                self.burgerbot_coords = find_red_center(cv_image)
                 self.get_burgerbot_vector()
                 self.wafflebot_img_coords()
                 (rows,cols,channels) = cv_image.shape
