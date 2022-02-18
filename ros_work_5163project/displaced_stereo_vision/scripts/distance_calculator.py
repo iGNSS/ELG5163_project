@@ -65,8 +65,8 @@ def calculate_distance():
     c1 = (qc2bb.position.x - wb2bb.position.x)*qc2bb.orientation.x + (qc2bb.position.y - wb2bb.position.y)*qc2bb.orientation.y +(qc2bb.position.z - wb2bb.position.z)*qc2bb.orientation.z
 
     a2 = -b1
-    b2 = (wb2bb.orientation.x)**2 + (wb2bb.orientation.y)**2 + (wb2bb.orientation.z)**2
-    c2 = (qc2bb.position.x - wb2bb.position.x)*wb2bb.orientation.x + (qc2bb.position.y - wb2bb.position.y)*wb2bb.orientation.y +(qc2bb.position.z - wb2bb.position.z)*wb2bb.orientation.z
+    b2 = -(wb2bb.orientation.x)**2 - (wb2bb.orientation.y)**2 - (wb2bb.orientation.z)**2
+    c2 = (qc2bb.position.x - wb2bb.position.x)*wb2bb.orientation.x + (qc2bb.position.y - wb2bb.position.y)*wb2bb.orientation.y + (qc2bb.position.z - wb2bb.position.z)*wb2bb.orientation.z
 
 
     A_mat = np.array([[a1, b1],
@@ -81,8 +81,9 @@ def calculate_distance():
 
     qc2bb_point = line3D(qc2bb, k)
     wb2bb_point = line3D(wb2bb, s)
-
-    return(wb2bb_point)
+    #result = 0.5*(qc2bb_point + wb2bb_point) - np.array([wb2bb.orientation.x, wb2bb.orientation.y,wb2bb.orientation.z])
+    result = 0.5*(wb2bb_point+qc2bb_point)
+    return(result)
 
 #node
 def distance_calculator():
@@ -99,10 +100,11 @@ def distance_calculator():
     distance_pub = rospy.Publisher(TP_BURGERBOT_DIST, Float32, queue_size = 10)
 
     while not rospy.is_shutdown():
-        try:
-            visual_distance = calculate_distance()
 
-            print(visual_distance)
+        try:
+            visual_distance_vector = calculate_distance()
+            #distance = np.sqrt(visual_distance_vector[0]**2+visual_distance_vector[1]**2+visual_distance_vector[2]**2)
+            print(visual_distance_vector)
         except:
             pass
         rate.sleep()

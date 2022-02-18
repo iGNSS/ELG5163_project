@@ -9,22 +9,19 @@
    <arg name="headless" value="false"/>
    <arg name="debug" value="false"/>
  </include>
+ <include file="$(find displaced_stereo_vision)/launch/robots.launch"/>
 
  <node
      name="quadcopter_driver"
      pkg="displaced_stereo_vision"
      type="quadcopter_driver.py"
-     output="screen"
-     required="true"
      >
  </node>
-<!--
+
  <node
      name="wafflebot_camera"
      pkg="displaced_stereo_vision"
-     type="wafflebotwaff_camera.py"
-     output="screen"
-     required="true"
+     type="wafflebot_camera.py"
      >
  </node>
 
@@ -32,11 +29,15 @@
      name="quadcopter_camera"
      pkg="displaced_stereo_vision"
      type="quadcopter_camera.py"
-     output="screen"
-     required="true"
+     >
+ </node>
+
+ <!-- <node
+     name="direction_calculator"
+     pkg="displaced_stereo_vision"
+     type="direction_calculator.py"
      >
  </node> -->
 
   <!-- include our robots -->
-  <include file="$(find displaced_stereo_vision)/launch/robots.launch"/>
 </launch>

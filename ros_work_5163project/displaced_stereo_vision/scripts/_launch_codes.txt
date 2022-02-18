@@ -1,4 +1,4 @@
 export TURTLEBOT3_MODEL=burger
-chmod +x quadcopter_driver.py
+chmod +x quadcopter_driver.py wafflebot_camera.py quadcopter_camera.py direction_calculator.py
 
 roslaunch displaced_stereo_vision main.launch
