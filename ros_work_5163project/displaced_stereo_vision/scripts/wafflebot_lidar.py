@@ -8,7 +8,7 @@ from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
 sensed_object = Pose2D()
-
+TP_BURGERBOT_DIST_L = "/burgerbot_distance_lidar"
 # saves data from LIDAR into sensed_object
 def detect_object(msg):
 
@@ -45,7 +45,7 @@ def laser_scan_reader():
     rospy.init_node('wafflebot_lidar', anonymous=False)
     rospy.Subscriber('wafflebot/scan', LaserScan, detect_object)
     pub = rospy.Publisher('lidar_distance', Pose2D, queue_size=10)
-    rate = rospy.Rate(2)
+    rate = rospy.Rate(20)
 
     while not rospy.is_shutdown():
 
