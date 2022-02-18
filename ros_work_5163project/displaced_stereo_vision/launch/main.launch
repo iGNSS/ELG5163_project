@@ -10,6 +10,33 @@
    <arg name="debug" value="false"/>
  </include>
 
+ <node
+     name="quadcopter_driver"
+     pkg="displaced_stereo_vision"
+     type="quadcopter_driver.py"
+     output="screen"
+     required="true"
+     >
+ </node>
+<!--
+ <node
+     name="wafflebot_camera"
+     pkg="displaced_stereo_vision"
+     type="wafflebotwaff_camera.py"
+     output="screen"
+     required="true"
+     >
+ </node>
+
+ <node
+     name="quadcopter_camera"
+     pkg="displaced_stereo_vision"
+     type="quadcopter_camera.py"
+     output="screen"
+     required="true"
+     >
+ </node> -->
+
   <!-- include our robots -->
   <include file="$(find displaced_stereo_vision)/launch/robots.launch"/>
 </launch>

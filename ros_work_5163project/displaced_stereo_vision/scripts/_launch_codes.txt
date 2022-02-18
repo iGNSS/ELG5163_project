@@ -1,0 +1,4 @@
+export TURTLEBOT3_MODEL=burger
+chmod +x quadcopter_driver.py
+
+roslaunch displaced_stereo_vision main.launch
