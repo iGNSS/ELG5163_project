@@ -14,21 +14,23 @@ from sensor_msgs.msg import CameraInfo
 
 #subscribed topics
 TS_BURGERBOT_PX_WB = "/wafflebot/camera/rgb/burgerbot_px"
-TS_WB_ODO = "/wafflebot/odom"
 TS_BURGERBOT_DIST = "/burgerbot_distance"
-TS_WB_CAMINFO = "/wafflebot/camera/rgb/camera_info"
+TS_BB_DIR = "/wafflebot/camera/rgb/burgerbot_dir"
 
 TS_BURGERBOT_DIST_L = "/burgerbot_distance_lidar"
+
 #published topics
 TP_WB_CMDVEL = "/wafflebot/cmd_vel"
 
 #global variables
 burgerbot_distance = Float32()
 burgerbot_px_WB = Pose()
-camInfo_WB = CameraInfo()
+burgerbot_dir = Pose()
+wb_vel = Twist()
 #constants
 DISTANCE_TOL = 0.05
 ANGLE_TOL = 0.05
+FOLLOWING_DISTANCE = 0.5
 
 #callbacks
 def handleCAM_WB(msg):
@@ -43,11 +45,27 @@ def handleDistance(msg):
     global burgerbot_distance
     burgerbot_distance = msg
 
+def handleBB_Dir(msg):
+    global burgerbot_dir
+    burgerbot_dir = msg
+
 #functions
-def velocity_control():
+def motion_control():
+    #refer navigate_robot example from ELG228 assignment 3
+    global wb_vel
+    if burgerbot_distance > FOLLOWING_DISTANCE:
+        pass
+
     #rotation control
     #speed control
     pass
+
+def find_angle():
+    #find xy orientation of camera
+    #get xy portion of unit vector to burgerbot
+    #get angle between these 2 vectors
+    pass
+
 
 #node
 def wafflebot_driver():
@@ -56,9 +74,9 @@ def wafflebot_driver():
     rate = rospy.Rate(60)
 
     #subscribers
-    rospy.Subscriber(TS_WB_CAMINFO, CameraInfo, handleCAM_WB)
     rospy.Subscriber(TS_BURGERBOT_PX_WB, Pose, handleBBPX_WB)
     rospy.Subsriber(TS_BURGERBOT_DIST, Float32, handleDistance)
+    rospy.Subscriber(TS_BB_DIR, Pose, handleBB_Dir)
 
     #publishers
     velpub = rospy.Publisher(TP_WB_CMDVEL, Twist, queue_size=10)
