@@ -55,8 +55,8 @@ def line3D(pose_vect, k):
     result = position + k*orientation_vector
     return result
 
-#function
-def calculate_distance():
+#functions
+def calculate_location():
     global qc2bb
     global wb2bb
     a1 = (qc2bb.orientation.x)**2 + (qc2bb.orientation.y)**2 + (qc2bb.orientation.z)**2
@@ -85,6 +85,14 @@ def calculate_distance():
     result = 0.5*(wb2bb_point+qc2bb_point)
     return(result)
 
+def calculate_distance():
+    burgerbot_location = calculate_location()
+    wafflebot_location = np.array([wb2bb.position.x, wb2bb.position.y, wb2bb.position.z])
+    displacement = burgerbot_location - wafflebot_location
+    result = np.sqrt(displacement[0]**2 + displacement[1]**2 + displacement[2]**2)
+    return result
+
+
 #node
 def distance_calculator():
     #init node
@@ -102,9 +110,11 @@ def distance_calculator():
     while not rospy.is_shutdown():
 
         try:
-            visual_distance_vector = calculate_distance()
-            #distance = np.sqrt(visual_distance_vector[0]**2+visual_distance_vector[1]**2+visual_distance_vector[2]**2)
+            visual_distance_vector = calculate_location()
             print(visual_distance_vector)
+            bb_distance = calculate_distance()
+            distance_pub.publish(bb_distance)
+
         except:
             pass
         rate.sleep()
