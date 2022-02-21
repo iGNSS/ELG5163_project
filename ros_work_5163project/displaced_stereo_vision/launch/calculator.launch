@@ -1,0 +1,31 @@
+<launch>
+
+
+  <node
+      name="direction_calculator"
+      pkg="displaced_stereo_vision"
+      type="direction_calculator.py"
+      output="screen"
+      launch-prefix ="xterm -e"
+      >
+  </node>
+
+  <node
+      name="distance_calculator"
+      pkg="displaced_stereo_vision"
+      type="distance_calculator.py"
+      output="screen"
+      launch-prefix ="xterm -e"
+      >
+  </node>
+
+  <!-- <node
+      name="wafflebot_driver"
+      pkg="displaced_stereo_vision"
+      type="wafflebot_driver.py"
+      output="screen"
+      launch-prefix ="xterm -e"
+      >
+  </node> -->
+
+</launch>
