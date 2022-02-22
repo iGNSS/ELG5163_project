@@ -27,7 +27,7 @@ TP_WB_CMDVEL = "/wafflebot/cmd_vel"
 
 #global variables
 
-burgerbot_distance = Float32()
+burgerbot_distance = 0
 burgerbot_dir = Pose()
 burgerbot_px = Pose()
 wb_pose = Odometry()
@@ -49,7 +49,7 @@ F_LEN = 1206.8897719532354
 
 def handleDistance(msg):
     global burgerbot_distance
-    burgerbot_distance = msg
+    burgerbot_distance = msg.position.x
 
 def handleBB_Dir(msg):
     global burgerbot_dir
@@ -80,7 +80,16 @@ def Process_WB_CAM(msg):
 def motion_control():
     #refer navigate_robot example from ELG228 assignment 3
     global wb_vel
-    wb_vel.angular.z = angle2BB
+    if abs(angle2BB) > ANGLE_TOL:
+        wb_vel.angular.z = -angle2BB
+    else:
+        wb_vel.angular.z = 0
+
+    if burgerbot_distance > FOLLOWING_DISTANCE:
+        wb_vel.linear.x = 0.2
+
+    else:
+        wb_vel.linear.x = 0
 
     # if burgerbot_distance > FOLLOWING_DISTANCE:
     #     pass
@@ -96,7 +105,7 @@ def wafflebot_driver():
     rate = rospy.Rate(20)
 
     #subscribers
-    rospy.Subscriber(TS_BURGERBOT_DIST, Float32, handleDistance)
+    rospy.Subscriber(TS_BURGERBOT_DIST, Pose, handleDistance)
     rospy.Subscriber(TS_BB_DIR, Pose, handleBB_Dir)
     rospy.Subscriber(TS_BURGERBOT_PX_WB, Pose, handleBB_PX)
     rospy.Subscriber(TS_WB_CAM_INFO, CameraInfo, Process_WB_CAM)

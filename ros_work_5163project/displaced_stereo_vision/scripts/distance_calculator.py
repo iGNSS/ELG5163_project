@@ -25,7 +25,7 @@ QC_Odo = Odometry()
 WB_Odo = Odometry()
 qc2bb = Pose()
 wb2bb = Pose()
-burgetbot_distance = Float32()
+burgerbot_distance = Pose()
 #constants
 #HT quadcopter to quadcopter cam
 #HT wafflebot to wafflebot cam
@@ -95,6 +95,7 @@ def calculate_distance():
 
 #node
 def distance_calculator():
+    global burgerbot_distance
     #init node
     rospy.init_node("distance_calculator", anonymous = False)
     rate = rospy.Rate(60)
@@ -105,7 +106,7 @@ def distance_calculator():
     rospy.Subscriber(TS_WB_BBDIR, Pose, handle_wb2bb)
 
     #publishers
-    distance_pub = rospy.Publisher(TP_BURGERBOT_DIST, Float32, queue_size = 10)
+    distance_pub = rospy.Publisher(TP_BURGERBOT_DIST, Pose, queue_size = 10)
 
     while not rospy.is_shutdown():
 
@@ -113,8 +114,8 @@ def distance_calculator():
             visual_distance_vector = calculate_location()
             print(visual_distance_vector)
             bb_distance = calculate_distance()
-            distance_pub.publish(bb_distance)
-
+            burgerbot_distance.position.x = bb_distance
+            distance_pub.publish(burgerbot_distance)
         except:
             pass
         rate.sleep()
