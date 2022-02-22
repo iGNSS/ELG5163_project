@@ -15,7 +15,6 @@ from sensor_msgs.msg import CameraInfo
 
 #subscribed topics
 TS_BURGERBOT_DIST = "/burgerbot_distance"
-TS_BB_DIR = "/wafflebot/camera/rgb/burgerbot_dir"
 TS_WB_ODO = "/wafflebot/odom"
 TS_BURGERBOT_DIST_L = "/burgerbot_distance_lidar"
 
@@ -27,13 +26,13 @@ TP_WB_CMDVEL = "/wafflebot/cmd_vel"
 
 #global variables
 
-burgerbot_distance = 0
-burgerbot_dir = Pose()
+
 burgerbot_px = Pose()
-wb_pose = Odometry()
 wb_vel = Twist()
 WB_Cam_info = CameraInfo()
 WB_CAM = ig.PinholeCameraModel()
+
+burgerbot_distance = 0
 angle2BB = 0
 
 #constants
@@ -55,9 +54,6 @@ def handleBB_Dir(msg):
     global burgerbot_dir
     burgerbot_dir = msg
 
-def handleOdo_WB(msg):
-    global wb_pose
-    wb_pose = msg
 
 def handleBB_PX(msg):
     global burgerbot_px
@@ -85,8 +81,8 @@ def motion_control():
     else:
         wb_vel.angular.z = 0
 
-    if burgerbot_distance > FOLLOWING_DISTANCE:
-        wb_vel.linear.x = 0.2
+    if burgerbot_distance - FOLLOWING_DISTANCE > DISTANCE_TOL:
+        wb_vel.linear.x = burgerbot_distance - FOLLOWING_DISTANCE
 
     else:
         wb_vel.linear.x = 0
@@ -106,7 +102,6 @@ def wafflebot_driver():
 
     #subscribers
     rospy.Subscriber(TS_BURGERBOT_DIST, Pose, handleDistance)
-    rospy.Subscriber(TS_BB_DIR, Pose, handleBB_Dir)
     rospy.Subscriber(TS_BURGERBOT_PX_WB, Pose, handleBB_PX)
     rospy.Subscriber(TS_WB_CAM_INFO, CameraInfo, Process_WB_CAM)
 
