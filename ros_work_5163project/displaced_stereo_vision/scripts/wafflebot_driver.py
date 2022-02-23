@@ -7,7 +7,7 @@ from tf.transformations import euler_from_quaternion, quaternion_from_euler
 import image_geometry as ig
 
 #message imports
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Pose, Pose2D
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32
 from geometry_msgs.msg import Twist
@@ -32,6 +32,8 @@ wb_vel = Twist()
 WB_Cam_info = CameraInfo()
 WB_CAM = ig.PinholeCameraModel()
 
+sensed_object = Pose2D()
+
 burgerbot_distance = 0
 angle2BB = 0
 
@@ -40,12 +42,7 @@ DISTANCE_TOL = 0.05
 ANGLE_TOL = 0.05
 FOLLOWING_DISTANCE = 0.5
 
-#from camera wafflebot/camera/rgb/camera_info
-CAM_CENTER_X = 1920/2
-F_LEN = 1206.8897719532354
-
 #callbacks
-
 def handleDistance(msg):
     global burgerbot_distance
     burgerbot_distance = msg.position.x
@@ -54,7 +51,6 @@ def handleBB_Dir(msg):
     global burgerbot_dir
     burgerbot_dir = msg
 
-
 def handleBB_PX(msg):
     global burgerbot_px
     burgerbot_px = msg
@@ -62,20 +58,20 @@ def handleBB_PX(msg):
 def Process_WB_CAM(msg):
     global WB_Cam_info
     global WB_CAM
+    global angle2BB
+
     WB_Cam_info = msg
     WB_CAM.fromCameraInfo(msg)
     raw_coord = (burgerbot_px.position.x, burgerbot_px.position.y)
     rec_coord = WB_CAM.rectifyPoint(raw_coord)
     vec2BB = WB_CAM.projectPixelTo3dRay(rec_coord)
-
-    global angle2BB
     angle2BB = np.arctan2(vec2BB[0], vec2BB[2])
-
 
 #functions
 def motion_control():
     #refer navigate_robot example from ELG228 assignment 3
     global wb_vel
+
     if abs(angle2BB) > ANGLE_TOL:
         wb_vel.angular.z = -angle2BB
     else:
@@ -83,16 +79,8 @@ def motion_control():
 
     if burgerbot_distance - FOLLOWING_DISTANCE > DISTANCE_TOL:
         wb_vel.linear.x = burgerbot_distance - FOLLOWING_DISTANCE
-
     else:
         wb_vel.linear.x = 0
-
-    # if burgerbot_distance > FOLLOWING_DISTANCE:
-    #     pass
-
-    #rotation control
-    #speed control
-    pass
 
 #node
 def wafflebot_driver():
