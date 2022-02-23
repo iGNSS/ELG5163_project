@@ -44,8 +44,9 @@ class distance_calculator:
 
         self.wb2bb = Pose()
         self.qc2bb = Pose()
+        self.wb2bb_dist = Pose()
 
-        self.wb2bb_dist_pub = rospy.Publisher(BURGERBOT_DISTANCE_WB_PUB_TOPIC,Float64,queue_size=10)
+        self.wb2bb_dist_pub = rospy.Publisher(BURGERBOT_DISTANCE_WB_PUB_TOPIC,Pose,queue_size=10)
 
         self.wb2bb_sub = rospy.Subscriber(BURGERBOT_DIRECTION_WB_SUB_TOPIC,Pose,self.update_bb_direction_wb)
         self.qc2bb_sub = rospy.Subscriber(BURGERBOT_DIRECTION_QC_SUB_TOPIC,Pose,self.update_bb_direction_qc)
@@ -95,9 +96,9 @@ class distance_calculator:
                 wb2bb_vec = np.array([self.wb2bb.orientation.x,self.wb2bb.orientation.y,self.wb2bb.orientation.z])
                 qc2bb_vec = np.array([self.qc2bb.orientation.x,self.qc2bb.orientation.y,self.qc2bb.orientation.z])
 
-                wb2bb_dist = self.calc_dist(qc_pos, wb_pos, qc2bb_vec, wb2bb_vec)
+                self.wb2bb_dist.position.x = self.calc_dist(qc_pos, wb_pos, qc2bb_vec, wb2bb_vec)
 
-                rospy.loginfo("Distance between Wafflebot and Burgerbot (m): %3.3f",wb2bb_dist)
+                rospy.loginfo("Distance between Wafflebot and Burgerbot (m): %3.3f",wb2bb_dist.position.x)
 
                 self.wb2bb_dist_pub.publish(wb2bb_dist)
 
