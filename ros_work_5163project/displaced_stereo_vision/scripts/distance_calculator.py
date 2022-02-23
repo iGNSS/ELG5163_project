@@ -27,12 +27,8 @@ qc2bb = Pose()
 wb2bb = Pose()
 burgerbot_distance = Pose()
 #constants
-#HT quadcopter to quadcopter cam
-#HT wafflebot to wafflebot cam
 
 #callback functions
-
-#need to work with odometry
 def handleOdo_QC(msg):
     global QC_Odo
     QC_Odo = msg
@@ -68,14 +64,13 @@ def calculate_location():
     b2 = -(wb2bb.orientation.x)**2 - (wb2bb.orientation.y)**2 - (wb2bb.orientation.z)**2
     c2 = (qc2bb.position.x - wb2bb.position.x)*wb2bb.orientation.x + (qc2bb.position.y - wb2bb.position.y)*wb2bb.orientation.y + (qc2bb.position.z - wb2bb.position.z)*wb2bb.orientation.z
 
-
     A_mat = np.array([[a1, b1],
                       [a2, b2]])
 
     B_mat = np.array([[-c1],
                       [-c2]])
 
-    closest_point_idx = np.linalg.inv(A_mat) @ B_mat
+    closest_point_idx = np.matmul(np.linalg.inv(A_mat), B_mat)
     k = closest_point_idx[0][0]
     s = closest_point_idx[1][0]
 
