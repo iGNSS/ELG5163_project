@@ -1,4 +1,44 @@
 export TURTLEBOT3_MODEL=burger
-chmod +x quadcopter_driver.py wafflebot_camera.py quadcopter_camera.py direction_calculator.py
+chmod +x quadcopter_driver.py wafflebot_camera.py quadcopter_camera.py
+chmod +x direction_calculator_env.py distance_calculator.py distance_calculator_2_env.py wafflebot_lidar.py
 
+test 1 - leader follower
 roslaunch displaced_stereo_vision main.launch
+-world
+-wafflebot_camera
+-quadcopter_camera
+-quadcopter_driver
+
+roslaunch displaced_stereo_vision calculator.launch
+-direction_calculator
+-distance_calculator
+-distance_calculator2
+-wafflebot_lidar
+
+#leader-follower testcase
+roslaunch displaced_stereo_vision moving_testdrive.launch*
+-wafflebot_driver
+-burgerbot_driver*
+-data_collector*
+
+
+#test 2 - stationary observer
+#different pose for burgerbot
+roslaunch displaced_stereo_vision main.launch #launch args burgerbot pose
+-world
+-wafflebot_camera
+-quadcopter_camera
+-quadcopter_driver
+
+roslaunch displaced_stereo_vision calculator.launch*
+-direction_calculator
+-distance_calculator
+-distance_calculator2
+-wafflebot_lidar
+
+#leader-follower testcase
+roslaunch displaced_stereo_vision stationary_testdrive.launch*
+-burgerbot_driver2*
+-data_collector*
+
+
