@@ -100,7 +100,7 @@ class distance_calculator:
 
                 rospy.loginfo("Distance between Wafflebot and Burgerbot (m): %3.3f",wb2bb_dist.position.x)
 
-                self.wb2bb_dist_pub.publish(wb2bb_dist)
+                self.wb2bb_dist_pub.publish(self.wb2bb_dist)
 
             r.sleep()
 
