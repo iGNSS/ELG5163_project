@@ -93,7 +93,7 @@ def distance_calculator():
     global burgerbot_distance
     #init node
     rospy.init_node("distance_calculator", anonymous = False)
-    rate = rospy.Rate(60)
+    rate = rospy.Rate(5)
     #subscribers
     rospy.Subscriber(TS_QC_ODO, Odometry, handleOdo_QC)
     rospy.Subscriber(TS_WB_ODO, Odometry, handleOdo_WB)
