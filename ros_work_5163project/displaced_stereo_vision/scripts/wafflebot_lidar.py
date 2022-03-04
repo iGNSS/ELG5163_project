@@ -63,7 +63,7 @@ def laser_scan_reader():
     rospy.init_node('wafflebot_lidar', anonymous=False)
     rospy.Subscriber(TS_WB_LIDAR , LaserScan, detect_object)
     pub = rospy.Publisher(TP_BURGERBOT_DIST, Pose2D, queue_size=10)
-    rate = rospy.Rate(20)
+    rate = rospy.Rate(5)
     listener = tf.TransformListener()
 
     while not rospy.is_shutdown():
@@ -71,22 +71,32 @@ def laser_scan_reader():
         #publish sensed_object
         pub.publish(sensed_object)
 
+        HTvect = np.array([[sensed_object.x*np.cos(sensed_object.theta)],
+                                 [sensed_object.x*np.sin(sensed_object.theta)],
+                                [0],
+                                [1]])
+
         #log sensed_object
-        dist_string = "distance to object(m): " + str(sensed_object.x)
-        angle_string = "angle to object(degrees): " + str(sensed_object.theta)
-        logstring ="\n" +dist_string + "\n" + angle_string  +"\n"
+        # dist_string = "distance to object(m): " + str(sensed_object.x)
+        # angle_string = "angle to object(radians): " + str(sensed_object.theta)
+        # logstring ="\n" +dist_string + "\n" + angle_string  +"\n"
+        #print(HTvect)
+
 
         try:
             (transLid2Cam, rotLid2Cam) = listener.lookupTransform(LIDAR_FRAME , CAMERA_FRAME, rospy.Time(0))
             # transLid2Cam = transRot[0]
             # rotLid2Cam = transRot[1]
             HTLid2Cam = listener.fromTranslationRotation(transLid2Cam, rotLid2Cam)
-            print(HTLid2Cam)
+            HTobj_cam = np.matmul(np.linalg.inv(HTLid2Cam), HTvect)
+            distance = np.sqrt(HTobj_cam[0][0]**2 + HTobj_cam[1][0]**2 + HTobj_cam[2][0]**2)
+            print(distance)
+
 
         except:
             pass
 
-        rospy.loginfo(logstring)
+        #rospy.loginfo(logstring)
         rate.sleep()
 
     rospy.spin()
