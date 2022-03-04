@@ -1,0 +1,2 @@
+rosrun tf tf_echo wafflebot_tf/base_link wafflebot_tf/base_scan
+rosrun tf tf_echo wafflebot_tf/base_link /wafflebot_tf/odom

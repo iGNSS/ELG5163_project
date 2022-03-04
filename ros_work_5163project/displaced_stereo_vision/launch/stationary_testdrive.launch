@@ -1,0 +1,22 @@
+<launch>
+
+    <node
+      name="burgerbot_driver2"
+      pkg="displaced_stereo_vision"
+      type="burgerbot_driver2.py"
+      output="screen"
+      launch-prefix ="xterm -e"
+      >
+    </node>
+
+    <node
+        name="data_collector"
+        pkg="displaced_stereo_vision"
+        type="data_collector.py"
+        output="screen"
+        launch-prefix ="xterm -e"
+        >
+    </node>
+
+
+</launch>
