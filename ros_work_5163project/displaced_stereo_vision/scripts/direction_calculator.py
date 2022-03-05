@@ -108,7 +108,7 @@ class direction_calculator:
 
     def update_direction_calculator(self):
         
-        r = rospy.Rate(5) # Rate of 5 Hz
+        r = rospy.Rate(10) # Rate of 10 Hz
         
         #self.listener.waitForTransform(self.wb_pcm.tfFrame(), '/wafflebot_tf/odom', rospy.Time(), rospy.Duration(4.0))
         #listener.waitForTransform(self.qc_pcm.tfFrame(), '/quadcopter_tf/odom', rospy.Time(), rospy.Duration(4.0))

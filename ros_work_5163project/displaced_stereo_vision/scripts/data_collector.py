@@ -19,9 +19,9 @@ roslib.load_manifest('displaced_stereo_vision')
 import sys
 import os
 import rospy
-from geometry_msgs.msg import Pose, Pose2D
+from geometry_msgs.msg import Pose
 
-newdir = os.path.dirname(os.getcwd()) + "/data"
+newdir = os.path.dirname(os.path.dirname(__file__)) + "/data"
 print(newdir)
 try:
     os.mkdir(newdir)
@@ -34,7 +34,7 @@ DISTANCE_DATA_COLLECTOR_LIDAR_FILEPATH = newdir + "/dist_lidar_data.csv"
 
 BURGERBOT_DISTANCE_WB_1_SUB_TOPIC = "/burgerbot_distance"
 BURGERBOT_DISTANCE_WB_2_SUB_TOPIC = "/wafflebot/camera/rgb/burgerbot_distance"
-BURGERBOT_DISTANCE_WB_LIDAR_SUB_TOPIC = "/burgerbot_distance_lidar"
+BURGERBOT_DISTANCE_WB_LIDAR_SUB_TOPIC = "/wafflebot/lidar_distance"
 
 
 ###################   Class   #################################################
@@ -47,17 +47,18 @@ class DataCollector:
 
         while not int(rospy.get_time()):
             print("Timer not ready")
+            rospy.sleep(0.5)
         self.start = rospy.get_time()
         
         print("Timer start at: " + str(self.start))
 
         self.wb2bb_dist1 = Pose()
         self.wb2bb_dist2 = Pose()
-        self.lidar_dist = Pose2D()
+        self.lidar_dist = Pose()
 
         self.wb2bb_dist_1_sub = rospy.Subscriber(BURGERBOT_DISTANCE_WB_1_SUB_TOPIC,Pose,self.update_dist_1_data)
         self.wb2bb_dist_2_sub = rospy.Subscriber(BURGERBOT_DISTANCE_WB_2_SUB_TOPIC,Pose,self.update_dist_2_data)
-        self.wb2bb_dist_lidar_sub = rospy.Subscriber(BURGERBOT_DISTANCE_WB_LIDAR_SUB_TOPIC,Pose2D,self.update_dist_lidar_data)
+        self.wb2bb_dist_lidar_sub = rospy.Subscriber(BURGERBOT_DISTANCE_WB_LIDAR_SUB_TOPIC,Pose,self.update_dist_lidar_data)
 
         header = 'Time(sec),Distance(m)'
 
