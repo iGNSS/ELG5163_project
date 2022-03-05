@@ -11,7 +11,7 @@
     <node
       name="distance_calculator"
       pkg="displaced_stereo_vision"
-      type="distance_calculator.py"
+      type="vm_distance_calculator.py"
       output="screen"
       launch-prefix ="xterm -e"
       >
@@ -26,13 +26,13 @@
         >
     </node>
 
-  <!-- <node
+  <node
       name="wafflebot_lidar"
       pkg="displaced_stereo_vision"
-      type="wafflebot_lidar.py"
+      type="vm_wafflebot_lidar.py"
       output="screen"
       launch-prefix ="xterm -e"
       >
-  </node> -->
+  </node>
 
 </launch>
