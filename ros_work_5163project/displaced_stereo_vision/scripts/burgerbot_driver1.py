@@ -18,11 +18,13 @@ TS_BURGERBOT_ODOM = "/burgerbot/odom"
 TP_BB_CMDVEL = "/burgerbot/cmd_vel"
 TP_BB_AT_FINAL = "burgerbot/final_target"
 #global variables
-TARGET_LIST =[[4,1], [5,0]]
+TARGET_LIST =[[4.5,0], [5,1]]
 
 current_target = Pose2D()
 current_target.x = TARGET_LIST[0][0]
 current_target.y = TARGET_LIST[0][1]
+
+t_i = 0
 delta_pose = Pose2D()
 BB_pose = Pose2D()
 BB_vel = Twist()
@@ -101,11 +103,23 @@ def handleOdo_BB(msg):
     global TARGET_LIST
     global At_final
 
-    for i in range(len(TARGET_LIST)):
-        if np.sqrt(delta_pose.x**2 + delta_pose.y**2) < DISTANCE_TOL:
-            current_target.x = TARGET_LIST[i][0]
-            current_target.y = TARGET_LIST[i][1]
-        
+    # for i in range(len(TARGET_LIST)):
+    #
+    #     if np.sqrt(delta_pose.x**2 + delta_pose.y**2) < DISTANCE_TOL:
+    #         print(i)
+    #         current_target.x = TARGET_LIST[i][0]
+    #         current_target.y = TARGET_LIST[i][1]
+
+    global t_i
+    if np.sqrt(delta_pose.x**2 + delta_pose.y**2) < DISTANCE_TOL:
+        t_i = t_i+1
+        try:
+            current_target.x = TARGET_LIST[t_i][0]
+            current_target.y = TARGET_LIST[t_i][1]
+            At_final.data = False
+        except:
+            At_final.data = True
+            print("at final target")
 
 #node
 def burgerbot_driver():
@@ -123,10 +137,11 @@ def burgerbot_driver():
             #calculate_delta_pose()
             #move_to_target()
             motion_control()
-            print(current_target)
-
-            print(BB_vel)
+            # print(current_target)
+            #
+            # print(BB_vel)
             vel_pub.publish(BB_vel)
+            bool_pub.publish(At_final)
         except:
             pass
         rate.sleep()
