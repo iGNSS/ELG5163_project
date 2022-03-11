@@ -36,32 +36,6 @@ At_final = Bool()
 DISTANCE_TOL = 0.12
 ANGLE_TOL = 0.05
 
-def calculate_delta_pose():
-    global delta_pose
-    delta_pose.x = current_target.x - BB_pose.x
-    delta_pose.y = current_target.y - BB_pose.y
-    target_angle = np.arctan2(delta_pose.y, delta_pose.x)
-    delta_pose.theta = target_angle - BB_pose.theta
-
-def theta_close_enough():
-    global delta_pose
-    if abs((delta_pose.theta))<ANGLE_TOL:
-        output = True
-    else:
-        output = False
-
-    return output
-
-def position_close_enough():
-    global delta_pose
-    if np.sqrt(delta_pose.x**2+delta_pose.y**2) > DISTANCE_TOL:
-        output = False
-    else:
-        output = True
-
-    return output
-
-
 def motion_control():
     global BB_vel
     target_distance = np.sqrt(delta_pose.x**2 + delta_pose.y**2)
@@ -136,12 +110,8 @@ def burgerbot_driver():
     while not rospy.is_shutdown():
         try:
 
-            #calculate_delta_pose()
-            #move_to_target()
             motion_control()
-            # print(current_target)
-            #
-            # print(BB_vel)
+
             vel_pub.publish(BB_vel)
             bool_pub.publish(At_final)
         except:
