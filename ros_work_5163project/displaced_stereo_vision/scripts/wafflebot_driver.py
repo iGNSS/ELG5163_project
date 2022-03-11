@@ -17,23 +17,17 @@ from sensor_msgs.msg import CameraInfo
 TS_BURGERBOT_DIST = "/burgerbot_distance"
 TS_WB_ODO = "/wafflebot/odom"
 TS_BURGERBOT_DIST_L = "/burgerbot_distance_lidar"
-
 TS_BURGERBOT_PX_WB = "/wafflebot/camera/rgb/burgerbot_px"
-
 TS_WB_CAM_INFO = "/wafflebot/camera/rgb/camera_info"
+
 #published topics
 TP_WB_CMDVEL = "/wafflebot/cmd_vel"
 
 #global variables
-
-
 burgerbot_px = Pose()
 wb_vel = Twist()
 WB_Cam_info = CameraInfo()
 WB_CAM = ig.PinholeCameraModel()
-
-sensed_object = Pose2D()
-
 burgerbot_distance = 0
 angle2BB = 0
 
