@@ -18,6 +18,8 @@ TS_BURGERBOT_ODOM = "/burgerbot/odom"
 TP_BB_CMDVEL = "/burgerbot/cmd_vel"
 TP_BB_AT_FINAL = "burgerbot/final_target"
 #global variables
+
+#target positions in x,y coordinates
 TARGET_LIST =[[3,0.75], [3.5,-1.5]]
 
 current_target = Pose2D()
