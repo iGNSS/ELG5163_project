@@ -36,27 +36,21 @@ At_final = Bool()
 DISTANCE_TOL = 0.12
 ANGLE_TOL = 0.05
 
+
 def motion_control():
     global BB_vel
-    target_distance = np.sqrt(delta_pose.x**2 + delta_pose.y**2)
+    
+    target_distance = np.hypot(delta_pose.x, delta_pose.y)    
 
-    if abs(delta_pose.theta)>ANGLE_TOL and target_distance>DISTANCE_TOL:
-        BB_vel.linear.x = 0
-        if abs(delta_pose.theta)>2*ANGLE_TOL  and target_distance>DISTANCE_TOL:
-            BB_vel.linear.x = 0
-            BB_vel.angular.z = delta_pose.theta
-        if abs(delta_pose.theta)<2*ANGLE_TOL and abs(delta_pose.theta)>ANGLE_TOL and target_distance>DISTANCE_TOL:
-            BB_vel.linear.x = 0
-            BB_vel.angular.z = 0.25*abs(delta_pose.theta)/delta_pose.theta +ANGLE_TOL/2
-
-
-    if abs(delta_pose.theta)<ANGLE_TOL and target_distance>DISTANCE_TOL:
-        BB_vel.angular.z = 0
-        BB_vel.linear.x = target_distance
-
-    if target_distance<DISTANCE_TOL:
-        BB_vel.angular.z = 0
-        BB_vel.linear.x = 0
+    if target_distance>DISTANCE_TOL:
+        
+        BB_vel.linear.x = 0.2*(np.cos(delta_pose.theta))
+        BB_vel.angular.z = 0.7*(np.sin(delta_pose.theta))
+        
+    else:
+        BB_vel.linear.x = 0.0
+        BB_vel.angular.z = 0.0
+  
 
 
 #callbacks
@@ -76,6 +70,13 @@ def handleOdo_BB(msg):
     target_angle = np.arctan2(delta_pose.y, delta_pose.x)
     delta_pose.theta = target_angle - BB_pose.theta
 
+    #If orientation error not between -pi and pi
+    if abs(delta_pose.theta) > np.pi:
+        if delta_pose.theta > 0:
+            delta_pose.theta -= (2 * np.pi)
+        else:
+            delta_pose.theta += (2 * np.pi)
+
     global TARGET_LIST
     global At_final
 
@@ -87,7 +88,7 @@ def handleOdo_BB(msg):
     #         current_target.y = TARGET_LIST[i][1]
 
     global t_i
-    if np.sqrt(delta_pose.x**2 + delta_pose.y**2) < DISTANCE_TOL:
+    if np.hypot(delta_pose.x, delta_pose.y) < DISTANCE_TOL:
         t_i = t_i+1
         try:
             current_target.x = TARGET_LIST[t_i][0]
@@ -115,6 +116,7 @@ def burgerbot_driver():
             vel_pub.publish(BB_vel)
             bool_pub.publish(At_final)
         except:
+
             pass
         rate.sleep()
 

@@ -20,6 +20,7 @@ import sys
 import os
 import rospy
 from geometry_msgs.msg import Pose
+from std_msgs.msg import Bool
 
 newdir = os.path.dirname(os.path.dirname(__file__)) + "/data"
 print(newdir)
@@ -35,6 +36,7 @@ DISTANCE_DATA_COLLECTOR_LIDAR_FILEPATH = newdir + "/dist_lidar_data.csv"
 BURGERBOT_DISTANCE_WB_1_SUB_TOPIC = "/burgerbot_distance"
 BURGERBOT_DISTANCE_WB_2_SUB_TOPIC = "/wafflebot/camera/rgb/burgerbot_distance"
 BURGERBOT_DISTANCE_WB_LIDAR_SUB_TOPIC = "/wafflebot/lidar_distance"
+SIMULATION_RUNNING_SUB_TOPIC = "/burgerbot/final_target"
 
 
 ###################   Class   #################################################
@@ -55,10 +57,12 @@ class DataCollector:
         self.wb2bb_dist1 = Pose()
         self.wb2bb_dist2 = Pose()
         self.lidar_dist = Pose()
+        self.sim_run = False
 
         self.wb2bb_dist_1_sub = rospy.Subscriber(BURGERBOT_DISTANCE_WB_1_SUB_TOPIC,Pose,self.update_dist_1_data)
         self.wb2bb_dist_2_sub = rospy.Subscriber(BURGERBOT_DISTANCE_WB_2_SUB_TOPIC,Pose,self.update_dist_2_data)
         self.wb2bb_dist_lidar_sub = rospy.Subscriber(BURGERBOT_DISTANCE_WB_LIDAR_SUB_TOPIC,Pose,self.update_dist_lidar_data)
+        self.sim_run_sub = rospy.Subscriber(SIMULATION_RUNNING_SUB_TOPIC,Bool,self.update_sim_state)
 
         header = 'Time(sec),Distance(m)'
 
@@ -94,11 +98,18 @@ class DataCollector:
         with open(filepath,'a') as f:
             f.write('\n'+t+','+d)
 
+    def update_sim_state(self, rec_msg):
+        self.sim_run = rec_msg.data
+        print("Checking if simulation ended.")
+
 def main(args):
     
     dc = DataCollector()
-    rospy.spin()
+    r = rospy.Rate(2) # Rate of 2 Hz
+    while not rospy.is_shutdown():
+        if dc.sim_run:
+            rospy.signal_shutdown("Simulation is over.")
+        r.sleep()
     
-
 if __name__ == '__main__':
     main(sys.argv)
