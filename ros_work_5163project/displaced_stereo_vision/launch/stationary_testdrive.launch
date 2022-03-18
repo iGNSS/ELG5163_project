@@ -1,9 +1,9 @@
 <launch>
 
     <node
-      name="burgerbot_driver2"
+      name="burgerbot_driver"
       pkg="displaced_stereo_vision"
-      type="burgerbot_driver2.py"
+      type="burgerbot_driver.py"
       output="screen"
       launch-prefix ="xterm -e"
       >
