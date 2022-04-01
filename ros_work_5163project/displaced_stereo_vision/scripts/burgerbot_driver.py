@@ -20,8 +20,11 @@ TP_BB_AT_FINAL = "burgerbot/final_target"
 #global variables
 
 #target positions in x,y coordinates
-TARGET_LIST =[[3,0.75], [3.5,-1.5]]
-
+#TARGET_LIST =[[3,0.75], [3.5,-1.5]]
+TARGET_LIST =[[3,1],
+               [4,0],
+               [3,-1],
+               [2,0]]
 current_target = Pose2D()
 current_target.x = TARGET_LIST[0][0]
 current_target.y = TARGET_LIST[0][1]
