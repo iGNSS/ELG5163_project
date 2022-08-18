@@ -12,7 +12,7 @@ import numpy as np
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Pose, Vector3
 
 #subscribed topics
 TS_QC_IMG =  "/quadcopter/front_cam/camera/image"
@@ -20,6 +20,7 @@ TS_QC_IMG =  "/quadcopter/front_cam/camera/image"
 #published topics
 TP_QC_I = "/quadcopter/front_cam/rgb/pub_img"
 TP_BURGERBOT_PX_QC = "/quadcopter/front_cam/rgb/burgerbot_px"
+T_TGT_VS = "/target_coords"
 
 #define functions
 def find_black_center(img):
